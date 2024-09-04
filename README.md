@@ -57,7 +57,7 @@ amass enum -d utica.edu -json amass_output.json
 - Maltego: Use Maltego for mapping relationships between subdomains.
 - Excel: Load CSV outputs into Excel to analyze and chart subdomains.
 
-### result
+### Result
 view the surface mapping 
 [view](https://github.com/Eweka01/Attack-Surface-Mapping/blob/c5cb4aa7956347fcabc17f3a4d05576f61105989/amass.html)
 
