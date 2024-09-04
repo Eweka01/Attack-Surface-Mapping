@@ -58,7 +58,7 @@ amass enum -d utica.edu -json amass_output.json
 - Excel: Load CSV outputs into Excel to analyze and chart subdomains.
 
 ### Result
-view the surface mapping 
+View the surface mapping 
 [view](https://github.com/Eweka01/Attack-Surface-Mapping/blob/c5cb4aa7956347fcabc17f3a4d05576f61105989/amass.html)
 
 ![Screenshot 2024-09-04 at 4 28 56 PM](https://github.com/user-attachments/assets/436e4bd8-41b6-48f5-b5ab-af388c0d1885)
