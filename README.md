@@ -57,5 +57,10 @@ amass enum -d utica.edu -json amass_output.json
 - Maltego: Use Maltego for mapping relationships between subdomains.
 - Excel: Load CSV outputs into Excel to analyze and chart subdomains.
 
+### result
+view the surface mapping 
+[Uploading amass.html…]()
+
+
 ## Conclusion
 This process outlines how to map the attack surface of a domain using Amass. The results can be further analyzed for potential vulnerabilities and network security issues. The generated results can be visualized using various external tools, depending on your preference and tool availability.
