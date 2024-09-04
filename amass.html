@@ -1,0 +1,1294 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>OWASP Amass Network Mapping</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+        div#tooltip {
+            position: absolute;        
+            display: inline-block;
+            padding: 10px;
+            font-family: 'Open Sans' sans-serif;
+            color: #000;
+            background-color: #fff;
+            border: 1px solid #999;
+            border-radius: 2px;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="graphDiv"></div>
+    <div id="tooltip"></div>
+
+<script>
+/* global d3 */
+
+var graph = {
+    nodes: [
+    
+        {id: 0, num: 124, label: "FQDN: utica.edu", color: "green" },
+    
+        {id: 1, num: 11, label: "FQDN: ns2.utica.edu", color: "green" },
+    
+        {id: 2, num: 11, label: "FQDN: ns1.utica.edu", color: "green" },
+    
+        {id: 3, num: 5, label: "FQDN: alt2.aspmx.l.google.com", color: "green" },
+    
+        {id: 4, num: 5, label: "FQDN: alt1.aspmx.l.google.com", color: "green" },
+    
+        {id: 5, num: 5, label: "FQDN: aspmx3.googlemail.com", color: "green" },
+    
+        {id: 6, num: 5, label: "FQDN: aspmx2.googlemail.com", color: "green" },
+    
+        {id: 7, num: 5, label: "FQDN: aspmx.l.google.com", color: "green" },
+    
+        {id: 8, num: 6, label: "IPAddress: 72.237.4.113", color: "orange" },
+    
+        {id: 9, num: 8, label: "FQDN: gamesrv2.utica.edu", color: "green" },
+    
+        {id: 10, num: 8, label: "FQDN: smtp-01.utica.edu", color: "green" },
+    
+        {id: 11, num: 8, label: "FQDN: ucvpn.utica.edu", color: "green" },
+    
+        {id: 12, num: 8, label: "FQDN: b9-etran-01.utica.edu", color: "green" },
+    
+        {id: 13, num: 8, label: "FQDN: cmlab.utica.edu", color: "green" },
+    
+        {id: 14, num: 8, label: "FQDN: minecraft.utica.edu", color: "green" },
+    
+        {id: 15, num: 8, label: "FQDN: utica-vpro-poc.utica.edu", color: "green" },
+    
+        {id: 16, num: 8, label: "FQDN: smtp.utica.edu", color: "green" },
+    
+        {id: 17, num: 8, label: "FQDN: ems.utica.edu", color: "green" },
+    
+        {id: 18, num: 8, label: "FQDN: cl-production.utica.edu", color: "green" },
+    
+        {id: 19, num: 8, label: "FQDN: sso.utica.edu", color: "green" },
+    
+        {id: 20, num: 8, label: "FQDN: www-01-pub.utica.edu", color: "green" },
+    
+        {id: 21, num: 5, label: "FQDN: vdi.ecjs.utica.edu", color: "green" },
+    
+        {id: 22, num: 8, label: "FQDN: bannerweb3.utica.edu", color: "green" },
+    
+        {id: 23, num: 8, label: "FQDN: soot.utica.edu", color: "green" },
+    
+        {id: 24, num: 8, label: "FQDN: status.utica.edu", color: "green" },
+    
+        {id: 25, num: 8, label: "FQDN: www-02-pub.utica.edu", color: "green" },
+    
+        {id: 26, num: 8, label: "FQDN: smsweb.utica.edu", color: "green" },
+    
+        {id: 27, num: 8, label: "FQDN: iits-vpn.utica.edu", color: "green" },
+    
+        {id: 28, num: 8, label: "FQDN: cl-sandbox.utica.edu", color: "green" },
+    
+        {id: 29, num: 8, label: "FQDN: genetec.utica.edu", color: "green" },
+    
+        {id: 30, num: 8, label: "FQDN: vpn2.utica.edu", color: "green" },
+    
+        {id: 31, num: 8, label: "FQDN: cashnet-01-pub.utica.edu", color: "green" },
+    
+        {id: 32, num: 8, label: "FQDN: www.utica.edu", color: "green" },
+    
+        {id: 33, num: 8, label: "FQDN: cs.utica.edu", color: "green" },
+    
+        {id: 34, num: 8, label: "FQDN: cs16.utica.edu", color: "green" },
+    
+        {id: 35, num: 8, label: "FQDN: vpn.utica.edu", color: "green" },
+    
+        {id: 36, num: 8, label: "FQDN: printcenter.utica.edu", color: "green" },
+    
+        {id: 37, num: 8, label: "FQDN: gaia.utica.edu", color: "green" },
+    
+        {id: 38, num: 8, label: "FQDN: csgo.utica.edu", color: "green" },
+    
+        {id: 39, num: 8, label: "FQDN: cas.utica.edu", color: "green" },
+    
+        {id: 40, num: 8, label: "FQDN: student-vpn.utica.edu", color: "green" },
+    
+        {id: 41, num: 8, label: "FQDN: l4d2.utica.edu", color: "green" },
+    
+        {id: 42, num: 8, label: "FQDN: lists.utica.edu", color: "green" },
+    
+        {id: 43, num: 8, label: "FQDN: l4d.utica.edu", color: "green" },
+    
+        {id: 44, num: 4, label: "IPAddress: 72.237.4.102", color: "orange" },
+    
+        {id: 45, num: 2, label: "FQDN: 102.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 46, num: 4, label: "IPAddress: 72.237.4.100", color: "orange" },
+    
+        {id: 47, num: 2, label: "FQDN: 100.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 48, num: 4, label: "IPAddress: 72.237.4.38", color: "orange" },
+    
+        {id: 49, num: 2, label: "FQDN: 38.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 50, num: 4, label: "IPAddress: 72.237.4.97", color: "orange" },
+    
+        {id: 51, num: 2, label: "FQDN: 97.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 52, num: 4, label: "IPAddress: 72.237.4.23", color: "orange" },
+    
+        {id: 53, num: 2, label: "FQDN: 23.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 54, num: 4, label: "IPAddress: 72.237.4.214", color: "orange" },
+    
+        {id: 55, num: 2, label: "FQDN: 214.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 56, num: 4, label: "IPAddress: 72.237.4.57", color: "orange" },
+    
+        {id: 57, num: 2, label: "FQDN: 57.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 58, num: 4, label: "IPAddress: 72.237.4.39", color: "orange" },
+    
+        {id: 59, num: 2, label: "FQDN: 39.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 60, num: 4, label: "IPAddress: 72.237.4.20", color: "orange" },
+    
+        {id: 61, num: 2, label: "FQDN: 20.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 62, num: 4, label: "IPAddress: 72.237.4.96", color: "orange" },
+    
+        {id: 63, num: 2, label: "FQDN: 96.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 64, num: 4, label: "IPAddress: 72.237.4.192", color: "orange" },
+    
+        {id: 65, num: 2, label: "FQDN: 192.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 66, num: 4, label: "IPAddress: 72.237.4.28", color: "orange" },
+    
+        {id: 67, num: 2, label: "FQDN: 28.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 68, num: 4, label: "IPAddress: 72.237.4.216", color: "orange" },
+    
+        {id: 69, num: 2, label: "FQDN: 216.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 70, num: 4, label: "IPAddress: 72.237.4.63", color: "orange" },
+    
+        {id: 71, num: 2, label: "FQDN: 63.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 72, num: 2, label: "FQDN: 55.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 73, num: 4, label: "IPAddress: 72.237.4.43", color: "orange" },
+    
+        {id: 74, num: 2, label: "FQDN: 43.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 75, num: 4, label: "IPAddress: 72.237.4.72", color: "orange" },
+    
+        {id: 76, num: 2, label: "FQDN: 72.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 77, num: 4, label: "IPAddress: 72.237.4.24", color: "orange" },
+    
+        {id: 78, num: 2, label: "FQDN: 24.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 79, num: 4, label: "IPAddress: 72.237.4.64", color: "orange" },
+    
+        {id: 80, num: 2, label: "FQDN: 64.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 81, num: 4, label: "IPAddress: 72.237.4.26", color: "orange" },
+    
+        {id: 82, num: 2, label: "FQDN: 26.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 83, num: 4, label: "IPAddress: 72.237.4.246", color: "orange" },
+    
+        {id: 84, num: 2, label: "FQDN: 246.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 85, num: 4, label: "IPAddress: 72.237.4.27", color: "orange" },
+    
+        {id: 86, num: 2, label: "FQDN: 27.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 87, num: 4, label: "IPAddress: 72.237.4.237", color: "orange" },
+    
+        {id: 88, num: 2, label: "FQDN: 237.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 89, num: 4, label: "IPAddress: 72.237.4.242", color: "orange" },
+    
+        {id: 90, num: 2, label: "FQDN: 242.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 91, num: 4, label: "IPAddress: 72.237.4.69", color: "orange" },
+    
+        {id: 92, num: 2, label: "FQDN: 69.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 93, num: 2, label: "FQDN: 113.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 94, num: 4, label: "IPAddress: 72.237.4.110", color: "orange" },
+    
+        {id: 95, num: 2, label: "FQDN: 110.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 96, num: 4, label: "IPAddress: 72.237.4.32", color: "orange" },
+    
+        {id: 97, num: 2, label: "FQDN: 32.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 98, num: 4, label: "IPAddress: 72.237.4.252", color: "orange" },
+    
+        {id: 99, num: 2, label: "FQDN: 252.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 100, num: 4, label: "IPAddress: 72.237.4.77", color: "orange" },
+    
+        {id: 101, num: 2, label: "FQDN: 77.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 102, num: 4, label: "IPAddress: 72.237.4.90", color: "orange" },
+    
+        {id: 103, num: 2, label: "FQDN: 90.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 104, num: 4, label: "IPAddress: 72.237.4.33", color: "orange" },
+    
+        {id: 105, num: 2, label: "FQDN: 33.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 106, num: 4, label: "IPAddress: 72.237.4.103", color: "orange" },
+    
+        {id: 107, num: 2, label: "FQDN: 103.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 108, num: 4, label: "IPAddress: 72.237.4.244", color: "orange" },
+    
+        {id: 109, num: 2, label: "FQDN: 244.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 110, num: 4, label: "IPAddress: 72.237.4.35", color: "orange" },
+    
+        {id: 111, num: 2, label: "FQDN: 35.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 112, num: 4, label: "IPAddress: 72.237.4.121", color: "orange" },
+    
+        {id: 113, num: 2, label: "FQDN: 121.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 114, num: 4, label: "IPAddress: 72.237.4.34", color: "orange" },
+    
+        {id: 115, num: 2, label: "FQDN: 34.4.237.72.in-addr.arpa", color: "green" },
+    
+        {id: 116, num: 3, label: "IPAddress: 64.233.184.26", color: "orange" },
+    
+        {id: 117, num: 3, label: "IPAddress: 2a00:1450:400c:c0b::1a", color: "orange" },
+    
+        {id: 118, num: 5, label: "IPAddress: 209.85.202.26", color: "orange" },
+    
+        {id: 119, num: 5, label: "IPAddress: 2a00:1450:400b:c00::1a", color: "orange" },
+    
+        {id: 120, num: 3, label: "IPAddress: 172.253.113.26", color: "orange" },
+    
+        {id: 121, num: 3, label: "IPAddress: 2607:f8b0:4023:1::1b", color: "orange" },
+    
+        {id: 122, num: 3, label: "IPAddress: 142.251.111.27", color: "orange" },
+    
+        {id: 123, num: 3, label: "IPAddress: 2607:f8b0:4002:c10::1a", color: "orange" },
+    
+        {id: 124, num: 38, label: "Netblock: 72.237.4.0/24", color: "pink" },
+    
+        {id: 125, num: 3, label: "Netblock: 64.233.160.0/19", color: "pink" },
+    
+        {id: 126, num: 3, label: "Netblock: 2a00:1450:400c::/48", color: "pink" },
+    
+        {id: 127, num: 3, label: "Netblock: 209.85.202.0/24", color: "pink" },
+    
+        {id: 128, num: 3, label: "Netblock: 2a00:1450:400b::/48", color: "pink" },
+    
+        {id: 129, num: 3, label: "Netblock: 172.253.113.0/24", color: "pink" },
+    
+        {id: 130, num: 4, label: "Netblock: 2607:f8b0::/32", color: "pink" },
+    
+        {id: 131, num: 3, label: "Netblock: 142.251.111.0/24", color: "pink" },
+    
+        {id: 132, num: 4, label: "ASN: AS26808", color: "blue" },
+    
+        {id: 133, num: 16, label: "ASN: AS15169", color: "blue" },
+    
+        {id: 134, num: 2, label: "RIROrg: UTICA-COLLEGE - Utica College", color: "cyan" },
+    
+        {id: 135, num: 2, label: "RIROrg: GOOGLE - Google LLC", color: "cyan" },
+    
+    ],
+    edges: [
+    
+        {source: 0, target: 1, label: "ns_record" },
+    
+        {source: 0, target: 2, label: "ns_record" },
+    
+        {source: 0, target: 3, label: "mx_record" },
+    
+        {source: 0, target: 4, label: "mx_record" },
+    
+        {source: 0, target: 5, label: "mx_record" },
+    
+        {source: 0, target: 6, label: "mx_record" },
+    
+        {source: 0, target: 7, label: "mx_record" },
+    
+        {source: 0, target: 8, label: "a_record" },
+    
+        {source: 0, target: 1, label: "node" },
+    
+        {source: 0, target: 2, label: "node" },
+    
+        {source: 0, target: 9, label: "node" },
+    
+        {source: 0, target: 10, label: "node" },
+    
+        {source: 0, target: 11, label: "node" },
+    
+        {source: 0, target: 12, label: "node" },
+    
+        {source: 0, target: 13, label: "node" },
+    
+        {source: 0, target: 14, label: "node" },
+    
+        {source: 0, target: 15, label: "node" },
+    
+        {source: 0, target: 16, label: "node" },
+    
+        {source: 0, target: 17, label: "node" },
+    
+        {source: 0, target: 18, label: "node" },
+    
+        {source: 0, target: 19, label: "node" },
+    
+        {source: 0, target: 20, label: "node" },
+    
+        {source: 0, target: 21, label: "node" },
+    
+        {source: 0, target: 22, label: "node" },
+    
+        {source: 0, target: 23, label: "node" },
+    
+        {source: 0, target: 24, label: "node" },
+    
+        {source: 0, target: 25, label: "node" },
+    
+        {source: 0, target: 26, label: "node" },
+    
+        {source: 0, target: 27, label: "node" },
+    
+        {source: 0, target: 28, label: "node" },
+    
+        {source: 0, target: 29, label: "node" },
+    
+        {source: 0, target: 30, label: "node" },
+    
+        {source: 0, target: 31, label: "node" },
+    
+        {source: 0, target: 32, label: "node" },
+    
+        {source: 0, target: 33, label: "node" },
+    
+        {source: 0, target: 34, label: "node" },
+    
+        {source: 0, target: 35, label: "node" },
+    
+        {source: 0, target: 36, label: "node" },
+    
+        {source: 0, target: 37, label: "node" },
+    
+        {source: 0, target: 38, label: "node" },
+    
+        {source: 0, target: 39, label: "node" },
+    
+        {source: 0, target: 40, label: "node" },
+    
+        {source: 0, target: 41, label: "node" },
+    
+        {source: 0, target: 42, label: "node" },
+    
+        {source: 0, target: 43, label: "node" },
+    
+        {source: 1, target: 44, label: "a_record" },
+    
+        {source: 0, target: 1, label: "ns_record" },
+    
+        {source: 45, target: 1, label: "ptr_record" },
+    
+        {source: 0, target: 1, label: "node" },
+    
+        {source: 2, target: 46, label: "a_record" },
+    
+        {source: 0, target: 2, label: "ns_record" },
+    
+        {source: 47, target: 2, label: "ptr_record" },
+    
+        {source: 0, target: 2, label: "node" },
+    
+        {source: 9, target: 48, label: "a_record" },
+    
+        {source: 49, target: 9, label: "ptr_record" },
+    
+        {source: 0, target: 9, label: "node" },
+    
+        {source: 10, target: 50, label: "a_record" },
+    
+        {source: 51, target: 10, label: "ptr_record" },
+    
+        {source: 0, target: 10, label: "node" },
+    
+        {source: 11, target: 52, label: "a_record" },
+    
+        {source: 53, target: 11, label: "ptr_record" },
+    
+        {source: 0, target: 11, label: "node" },
+    
+        {source: 12, target: 54, label: "a_record" },
+    
+        {source: 55, target: 12, label: "ptr_record" },
+    
+        {source: 0, target: 12, label: "node" },
+    
+        {source: 13, target: 56, label: "a_record" },
+    
+        {source: 57, target: 13, label: "ptr_record" },
+    
+        {source: 0, target: 13, label: "node" },
+    
+        {source: 14, target: 58, label: "a_record" },
+    
+        {source: 59, target: 14, label: "ptr_record" },
+    
+        {source: 0, target: 14, label: "node" },
+    
+        {source: 15, target: 60, label: "a_record" },
+    
+        {source: 61, target: 15, label: "ptr_record" },
+    
+        {source: 0, target: 15, label: "node" },
+    
+        {source: 16, target: 62, label: "a_record" },
+    
+        {source: 63, target: 16, label: "ptr_record" },
+    
+        {source: 0, target: 16, label: "node" },
+    
+        {source: 17, target: 64, label: "a_record" },
+    
+        {source: 65, target: 17, label: "ptr_record" },
+    
+        {source: 0, target: 17, label: "node" },
+    
+        {source: 18, target: 66, label: "a_record" },
+    
+        {source: 67, target: 18, label: "ptr_record" },
+    
+        {source: 0, target: 18, label: "node" },
+    
+        {source: 19, target: 68, label: "a_record" },
+    
+        {source: 69, target: 19, label: "ptr_record" },
+    
+        {source: 0, target: 19, label: "node" },
+    
+        {source: 20, target: 70, label: "a_record" },
+    
+        {source: 71, target: 20, label: "ptr_record" },
+    
+        {source: 0, target: 20, label: "node" },
+    
+        {source: 72, target: 21, label: "ptr_record" },
+    
+        {source: 0, target: 21, label: "node" },
+    
+        {source: 22, target: 73, label: "a_record" },
+    
+        {source: 74, target: 22, label: "ptr_record" },
+    
+        {source: 0, target: 22, label: "node" },
+    
+        {source: 23, target: 75, label: "a_record" },
+    
+        {source: 76, target: 23, label: "ptr_record" },
+    
+        {source: 0, target: 23, label: "node" },
+    
+        {source: 24, target: 77, label: "a_record" },
+    
+        {source: 78, target: 24, label: "ptr_record" },
+    
+        {source: 0, target: 24, label: "node" },
+    
+        {source: 25, target: 79, label: "a_record" },
+    
+        {source: 80, target: 25, label: "ptr_record" },
+    
+        {source: 0, target: 25, label: "node" },
+    
+        {source: 26, target: 81, label: "a_record" },
+    
+        {source: 82, target: 26, label: "ptr_record" },
+    
+        {source: 0, target: 26, label: "node" },
+    
+        {source: 27, target: 83, label: "a_record" },
+    
+        {source: 84, target: 27, label: "ptr_record" },
+    
+        {source: 0, target: 27, label: "node" },
+    
+        {source: 28, target: 85, label: "a_record" },
+    
+        {source: 86, target: 28, label: "ptr_record" },
+    
+        {source: 0, target: 28, label: "node" },
+    
+        {source: 29, target: 87, label: "a_record" },
+    
+        {source: 88, target: 29, label: "ptr_record" },
+    
+        {source: 0, target: 29, label: "node" },
+    
+        {source: 30, target: 89, label: "a_record" },
+    
+        {source: 90, target: 30, label: "ptr_record" },
+    
+        {source: 0, target: 30, label: "node" },
+    
+        {source: 31, target: 91, label: "a_record" },
+    
+        {source: 92, target: 31, label: "ptr_record" },
+    
+        {source: 0, target: 31, label: "node" },
+    
+        {source: 32, target: 8, label: "a_record" },
+    
+        {source: 93, target: 32, label: "ptr_record" },
+    
+        {source: 0, target: 32, label: "node" },
+    
+        {source: 33, target: 94, label: "a_record" },
+    
+        {source: 95, target: 33, label: "ptr_record" },
+    
+        {source: 0, target: 33, label: "node" },
+    
+        {source: 34, target: 96, label: "a_record" },
+    
+        {source: 97, target: 34, label: "ptr_record" },
+    
+        {source: 0, target: 34, label: "node" },
+    
+        {source: 35, target: 98, label: "a_record" },
+    
+        {source: 99, target: 35, label: "ptr_record" },
+    
+        {source: 0, target: 35, label: "node" },
+    
+        {source: 36, target: 100, label: "a_record" },
+    
+        {source: 101, target: 36, label: "ptr_record" },
+    
+        {source: 0, target: 36, label: "node" },
+    
+        {source: 37, target: 102, label: "a_record" },
+    
+        {source: 103, target: 37, label: "ptr_record" },
+    
+        {source: 0, target: 37, label: "node" },
+    
+        {source: 38, target: 104, label: "a_record" },
+    
+        {source: 105, target: 38, label: "ptr_record" },
+    
+        {source: 0, target: 38, label: "node" },
+    
+        {source: 39, target: 106, label: "a_record" },
+    
+        {source: 107, target: 39, label: "ptr_record" },
+    
+        {source: 0, target: 39, label: "node" },
+    
+        {source: 40, target: 108, label: "a_record" },
+    
+        {source: 109, target: 40, label: "ptr_record" },
+    
+        {source: 0, target: 40, label: "node" },
+    
+        {source: 41, target: 110, label: "a_record" },
+    
+        {source: 111, target: 41, label: "ptr_record" },
+    
+        {source: 0, target: 41, label: "node" },
+    
+        {source: 42, target: 112, label: "a_record" },
+    
+        {source: 113, target: 42, label: "ptr_record" },
+    
+        {source: 0, target: 42, label: "node" },
+    
+        {source: 43, target: 114, label: "a_record" },
+    
+        {source: 115, target: 43, label: "ptr_record" },
+    
+        {source: 0, target: 43, label: "node" },
+    
+        {source: 1, target: 44, label: "a_record" },
+    
+        {source: 0, target: 1, label: "ns_record" },
+    
+        {source: 45, target: 1, label: "ptr_record" },
+    
+        {source: 0, target: 1, label: "node" },
+    
+        {source: 2, target: 46, label: "a_record" },
+    
+        {source: 0, target: 2, label: "ns_record" },
+    
+        {source: 47, target: 2, label: "ptr_record" },
+    
+        {source: 0, target: 2, label: "node" },
+    
+        {source: 3, target: 116, label: "a_record" },
+    
+        {source: 3, target: 117, label: "aaaa_record" },
+    
+        {source: 4, target: 118, label: "a_record" },
+    
+        {source: 4, target: 119, label: "aaaa_record" },
+    
+        {source: 5, target: 120, label: "a_record" },
+    
+        {source: 5, target: 121, label: "aaaa_record" },
+    
+        {source: 6, target: 118, label: "a_record" },
+    
+        {source: 6, target: 119, label: "aaaa_record" },
+    
+        {source: 7, target: 122, label: "a_record" },
+    
+        {source: 7, target: 123, label: "aaaa_record" },
+    
+        {source: 0, target: 8, label: "a_record" },
+    
+        {source: 124, target: 8, label: "contains" },
+    
+        {source: 32, target: 8, label: "a_record" },
+    
+        {source: 9, target: 48, label: "a_record" },
+    
+        {source: 49, target: 9, label: "ptr_record" },
+    
+        {source: 0, target: 9, label: "node" },
+    
+        {source: 10, target: 50, label: "a_record" },
+    
+        {source: 51, target: 10, label: "ptr_record" },
+    
+        {source: 0, target: 10, label: "node" },
+    
+        {source: 11, target: 52, label: "a_record" },
+    
+        {source: 53, target: 11, label: "ptr_record" },
+    
+        {source: 0, target: 11, label: "node" },
+    
+        {source: 12, target: 54, label: "a_record" },
+    
+        {source: 55, target: 12, label: "ptr_record" },
+    
+        {source: 0, target: 12, label: "node" },
+    
+        {source: 13, target: 56, label: "a_record" },
+    
+        {source: 57, target: 13, label: "ptr_record" },
+    
+        {source: 0, target: 13, label: "node" },
+    
+        {source: 14, target: 58, label: "a_record" },
+    
+        {source: 59, target: 14, label: "ptr_record" },
+    
+        {source: 0, target: 14, label: "node" },
+    
+        {source: 15, target: 60, label: "a_record" },
+    
+        {source: 61, target: 15, label: "ptr_record" },
+    
+        {source: 0, target: 15, label: "node" },
+    
+        {source: 16, target: 62, label: "a_record" },
+    
+        {source: 63, target: 16, label: "ptr_record" },
+    
+        {source: 0, target: 16, label: "node" },
+    
+        {source: 17, target: 64, label: "a_record" },
+    
+        {source: 65, target: 17, label: "ptr_record" },
+    
+        {source: 0, target: 17, label: "node" },
+    
+        {source: 18, target: 66, label: "a_record" },
+    
+        {source: 67, target: 18, label: "ptr_record" },
+    
+        {source: 0, target: 18, label: "node" },
+    
+        {source: 19, target: 68, label: "a_record" },
+    
+        {source: 69, target: 19, label: "ptr_record" },
+    
+        {source: 0, target: 19, label: "node" },
+    
+        {source: 20, target: 70, label: "a_record" },
+    
+        {source: 71, target: 20, label: "ptr_record" },
+    
+        {source: 0, target: 20, label: "node" },
+    
+        {source: 72, target: 21, label: "ptr_record" },
+    
+        {source: 0, target: 21, label: "node" },
+    
+        {source: 22, target: 73, label: "a_record" },
+    
+        {source: 74, target: 22, label: "ptr_record" },
+    
+        {source: 0, target: 22, label: "node" },
+    
+        {source: 23, target: 75, label: "a_record" },
+    
+        {source: 76, target: 23, label: "ptr_record" },
+    
+        {source: 0, target: 23, label: "node" },
+    
+        {source: 24, target: 77, label: "a_record" },
+    
+        {source: 78, target: 24, label: "ptr_record" },
+    
+        {source: 0, target: 24, label: "node" },
+    
+        {source: 25, target: 79, label: "a_record" },
+    
+        {source: 80, target: 25, label: "ptr_record" },
+    
+        {source: 0, target: 25, label: "node" },
+    
+        {source: 26, target: 81, label: "a_record" },
+    
+        {source: 82, target: 26, label: "ptr_record" },
+    
+        {source: 0, target: 26, label: "node" },
+    
+        {source: 27, target: 83, label: "a_record" },
+    
+        {source: 84, target: 27, label: "ptr_record" },
+    
+        {source: 0, target: 27, label: "node" },
+    
+        {source: 28, target: 85, label: "a_record" },
+    
+        {source: 86, target: 28, label: "ptr_record" },
+    
+        {source: 0, target: 28, label: "node" },
+    
+        {source: 29, target: 87, label: "a_record" },
+    
+        {source: 88, target: 29, label: "ptr_record" },
+    
+        {source: 0, target: 29, label: "node" },
+    
+        {source: 30, target: 89, label: "a_record" },
+    
+        {source: 90, target: 30, label: "ptr_record" },
+    
+        {source: 0, target: 30, label: "node" },
+    
+        {source: 31, target: 91, label: "a_record" },
+    
+        {source: 92, target: 31, label: "ptr_record" },
+    
+        {source: 0, target: 31, label: "node" },
+    
+        {source: 32, target: 8, label: "a_record" },
+    
+        {source: 93, target: 32, label: "ptr_record" },
+    
+        {source: 0, target: 32, label: "node" },
+    
+        {source: 33, target: 94, label: "a_record" },
+    
+        {source: 95, target: 33, label: "ptr_record" },
+    
+        {source: 0, target: 33, label: "node" },
+    
+        {source: 34, target: 96, label: "a_record" },
+    
+        {source: 97, target: 34, label: "ptr_record" },
+    
+        {source: 0, target: 34, label: "node" },
+    
+        {source: 35, target: 98, label: "a_record" },
+    
+        {source: 99, target: 35, label: "ptr_record" },
+    
+        {source: 0, target: 35, label: "node" },
+    
+        {source: 36, target: 100, label: "a_record" },
+    
+        {source: 101, target: 36, label: "ptr_record" },
+    
+        {source: 0, target: 36, label: "node" },
+    
+        {source: 37, target: 102, label: "a_record" },
+    
+        {source: 103, target: 37, label: "ptr_record" },
+    
+        {source: 0, target: 37, label: "node" },
+    
+        {source: 38, target: 104, label: "a_record" },
+    
+        {source: 105, target: 38, label: "ptr_record" },
+    
+        {source: 0, target: 38, label: "node" },
+    
+        {source: 39, target: 106, label: "a_record" },
+    
+        {source: 107, target: 39, label: "ptr_record" },
+    
+        {source: 0, target: 39, label: "node" },
+    
+        {source: 40, target: 108, label: "a_record" },
+    
+        {source: 109, target: 40, label: "ptr_record" },
+    
+        {source: 0, target: 40, label: "node" },
+    
+        {source: 41, target: 110, label: "a_record" },
+    
+        {source: 111, target: 41, label: "ptr_record" },
+    
+        {source: 0, target: 41, label: "node" },
+    
+        {source: 42, target: 112, label: "a_record" },
+    
+        {source: 113, target: 42, label: "ptr_record" },
+    
+        {source: 0, target: 42, label: "node" },
+    
+        {source: 43, target: 114, label: "a_record" },
+    
+        {source: 115, target: 43, label: "ptr_record" },
+    
+        {source: 0, target: 43, label: "node" },
+    
+        {source: 1, target: 44, label: "a_record" },
+    
+        {source: 124, target: 44, label: "contains" },
+    
+        {source: 2, target: 46, label: "a_record" },
+    
+        {source: 124, target: 46, label: "contains" },
+    
+        {source: 9, target: 48, label: "a_record" },
+    
+        {source: 124, target: 48, label: "contains" },
+    
+        {source: 10, target: 50, label: "a_record" },
+    
+        {source: 124, target: 50, label: "contains" },
+    
+        {source: 11, target: 52, label: "a_record" },
+    
+        {source: 124, target: 52, label: "contains" },
+    
+        {source: 12, target: 54, label: "a_record" },
+    
+        {source: 124, target: 54, label: "contains" },
+    
+        {source: 13, target: 56, label: "a_record" },
+    
+        {source: 124, target: 56, label: "contains" },
+    
+        {source: 14, target: 58, label: "a_record" },
+    
+        {source: 124, target: 58, label: "contains" },
+    
+        {source: 15, target: 60, label: "a_record" },
+    
+        {source: 124, target: 60, label: "contains" },
+    
+        {source: 16, target: 62, label: "a_record" },
+    
+        {source: 124, target: 62, label: "contains" },
+    
+        {source: 17, target: 64, label: "a_record" },
+    
+        {source: 124, target: 64, label: "contains" },
+    
+        {source: 18, target: 66, label: "a_record" },
+    
+        {source: 124, target: 66, label: "contains" },
+    
+        {source: 19, target: 68, label: "a_record" },
+    
+        {source: 124, target: 68, label: "contains" },
+    
+        {source: 20, target: 70, label: "a_record" },
+    
+        {source: 124, target: 70, label: "contains" },
+    
+        {source: 22, target: 73, label: "a_record" },
+    
+        {source: 124, target: 73, label: "contains" },
+    
+        {source: 23, target: 75, label: "a_record" },
+    
+        {source: 124, target: 75, label: "contains" },
+    
+        {source: 24, target: 77, label: "a_record" },
+    
+        {source: 124, target: 77, label: "contains" },
+    
+        {source: 25, target: 79, label: "a_record" },
+    
+        {source: 124, target: 79, label: "contains" },
+    
+        {source: 26, target: 81, label: "a_record" },
+    
+        {source: 124, target: 81, label: "contains" },
+    
+        {source: 27, target: 83, label: "a_record" },
+    
+        {source: 124, target: 83, label: "contains" },
+    
+        {source: 28, target: 85, label: "a_record" },
+    
+        {source: 124, target: 85, label: "contains" },
+    
+        {source: 29, target: 87, label: "a_record" },
+    
+        {source: 124, target: 87, label: "contains" },
+    
+        {source: 30, target: 89, label: "a_record" },
+    
+        {source: 124, target: 89, label: "contains" },
+    
+        {source: 31, target: 91, label: "a_record" },
+    
+        {source: 124, target: 91, label: "contains" },
+    
+        {source: 33, target: 94, label: "a_record" },
+    
+        {source: 124, target: 94, label: "contains" },
+    
+        {source: 34, target: 96, label: "a_record" },
+    
+        {source: 124, target: 96, label: "contains" },
+    
+        {source: 35, target: 98, label: "a_record" },
+    
+        {source: 124, target: 98, label: "contains" },
+    
+        {source: 36, target: 100, label: "a_record" },
+    
+        {source: 124, target: 100, label: "contains" },
+    
+        {source: 37, target: 102, label: "a_record" },
+    
+        {source: 124, target: 102, label: "contains" },
+    
+        {source: 38, target: 104, label: "a_record" },
+    
+        {source: 124, target: 104, label: "contains" },
+    
+        {source: 39, target: 106, label: "a_record" },
+    
+        {source: 124, target: 106, label: "contains" },
+    
+        {source: 40, target: 108, label: "a_record" },
+    
+        {source: 124, target: 108, label: "contains" },
+    
+        {source: 41, target: 110, label: "a_record" },
+    
+        {source: 124, target: 110, label: "contains" },
+    
+        {source: 42, target: 112, label: "a_record" },
+    
+        {source: 124, target: 112, label: "contains" },
+    
+        {source: 43, target: 114, label: "a_record" },
+    
+        {source: 124, target: 114, label: "contains" },
+    
+        {source: 3, target: 116, label: "a_record" },
+    
+        {source: 125, target: 116, label: "contains" },
+    
+        {source: 3, target: 117, label: "aaaa_record" },
+    
+        {source: 126, target: 117, label: "contains" },
+    
+        {source: 4, target: 118, label: "a_record" },
+    
+        {source: 127, target: 118, label: "contains" },
+    
+        {source: 6, target: 118, label: "a_record" },
+    
+        {source: 4, target: 119, label: "aaaa_record" },
+    
+        {source: 128, target: 119, label: "contains" },
+    
+        {source: 6, target: 119, label: "aaaa_record" },
+    
+        {source: 5, target: 120, label: "a_record" },
+    
+        {source: 129, target: 120, label: "contains" },
+    
+        {source: 5, target: 121, label: "aaaa_record" },
+    
+        {source: 130, target: 121, label: "contains" },
+    
+        {source: 7, target: 122, label: "a_record" },
+    
+        {source: 131, target: 122, label: "contains" },
+    
+        {source: 7, target: 123, label: "aaaa_record" },
+    
+        {source: 130, target: 123, label: "contains" },
+    
+        {source: 132, target: 124, label: "announces" },
+    
+        {source: 133, target: 125, label: "announces" },
+    
+        {source: 133, target: 126, label: "announces" },
+    
+        {source: 133, target: 127, label: "announces" },
+    
+        {source: 133, target: 128, label: "announces" },
+    
+        {source: 133, target: 129, label: "announces" },
+    
+        {source: 133, target: 130, label: "announces" },
+    
+        {source: 133, target: 131, label: "announces" },
+    
+        {source: 132, target: 134, label: "managed_by" },
+    
+        {source: 132, target: 124, label: "announces" },
+    
+        {source: 133, target: 135, label: "managed_by" },
+    
+        {source: 133, target: 127, label: "announces" },
+    
+        {source: 133, target: 125, label: "announces" },
+    
+        {source: 133, target: 128, label: "announces" },
+    
+        {source: 133, target: 129, label: "announces" },
+    
+        {source: 133, target: 126, label: "announces" },
+    
+        {source: 133, target: 130, label: "announces" },
+    
+        {source: 133, target: 131, label: "announces" },
+    
+        {source: 132, target: 134, label: "managed_by" },
+    
+        {source: 133, target: 135, label: "managed_by" },
+    
+    ]
+};
+
+var graphWidth = window.innerWidth,
+    graphHeight = window.innerHeight;
+
+var graphCanvas = d3.select('#graphDiv')
+    .append('canvas')
+    .classed('mainCanvas', true)
+    .attr('width', graphWidth + 'px')
+    .attr('height', graphHeight + 'px')
+    .node();
+
+var ctx = graphCanvas.getContext('2d');
+
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+var r = 5,
+    max = 124,
+    simulation = d3.forceSimulation()
+        .nodes(graph.nodes)
+        .force("link", d3.forceLink()
+            .links(graph.edges)
+            .distance(nodeLinkDistance)
+            .strength(nodeLinkStrength)
+            .id(function(d) { return d.id; }))
+        .force("charge", d3.forceManyBody()
+            .strength(nodeChargeStrength)
+            .distanceMax(graphWidth *2))
+        .force("collide", d3.forceCollide()
+            .radius(nodeCollideRadius))
+        .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
+        .on("tick", update),
+    transform = d3.zoomIdentity;
+
+d3.select(graphCanvas)
+    .call(d3.drag()
+        .container(graphCanvas)
+        .subject(dragsubject)
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended))
+    .call(d3.zoom().scaleExtent([1 / 10, 8]).on("zoom", zoomed));
+
+function nodePercent(n) {
+    return n.num / max;
+}
+
+function nodeRadius(n) {
+    return (1.5 * r) + ((3 * r) * nodePercent(n));
+}
+
+function nodeCollideRadius(n) {
+    return nodeRadius(n) + 1;
+}
+
+function nodeLinkDistance(e) {
+    var n1 = graph.nodes[e.source.id],
+        n2 = graph.nodes[e.target.id];
+
+    var avg = (nodePercent(n1) + nodePercent(n2)) / 2;
+    
+    return 60 * avg;
+}
+
+function nodeLinkStrength(e) {
+    var n1 = graph.nodes[e.source.id],
+        n2 = graph.nodes[e.target.id];
+
+    var avg = (nodePercent(n1) + nodePercent(n2)) / 2;
+
+    return 1 - (1 * avg);
+}
+
+function nodeChargeStrength(n) {
+    return -100 + (-300 * nodePercent(n));
+}
+
+function zoomed() {
+    transform = d3.event.transform;
+    update()
+}
+
+function update() {
+    ctx.save();
+    ctx.clearRect(0, 0, graphWidth, graphHeight);
+    ctx.translate(transform.x, transform.y);
+    ctx.scale(transform.k, transform.k);
+
+    graph.edges.forEach(drawEdge);
+    graph.nodes.forEach(drawNode);
+
+    if (closeNode) {
+        d3.select('#tooltip')
+            .style('opacity', 0.8)
+            .style('top', transform.applyY(closeNode.y) + 5 + 'px')
+            .style('left', transform.applyX(closeNode.x) + 5 + 'px')
+            .html(closeNode.label);
+    }  else {
+        d3.select('#tooltip')
+            .style('opacity', 0);
+    }
+
+    ctx.restore();
+}
+
+function drawNode(d) {
+    var size = nodeRadius(d);
+
+    ctx.beginPath();
+    ctx.fillStyle = d.color;
+    ctx.moveTo(d.x, d.y);
+    ctx.arc(d.x, d.y, size, 0, 2 * Math.PI);
+    ctx.strokeStyle = "#333333";
+    ctx.stroke();
+    ctx.fill();
+}
+
+function drawEdge(e) {
+    var dx = e.target.x - e.source.x,
+        dy = e.target.y - e.source.y,
+        align = 'center';
+
+    ctx.beginPath()
+    ctx.moveTo(e.source.x, e.source.y);
+    ctx.lineTo(e.target.x, e.target.y);
+    ctx.strokeStyle = "#aaa";
+    ctx.stroke();
+
+    var pad = 1/2;
+
+    ctx.save();
+    ctx.textAlign = align
+    ctx.translate(e.source.x + dx * pad, e.source.y + dy * pad);
+
+    if (dx < 0) {
+        ctx.rotate(Math.atan2(dy, dx) - Math.PI);
+    } else {
+        ctx.rotate(Math.atan2(dy, dx));
+    }
+
+    ctx.fillStyle = "#aaa";
+    ctx.fillText(e.label, 0, 0);
+    ctx.restore();
+}
+
+var closeNode;
+d3.select("canvas").on("mousemove", function(d) {
+    var p = d3.mouse(this);
+
+    closeNode = findNode(p[0], p[1]);
+    update();
+})
+
+function findNode(x, y) {
+    var i,
+        newx = transform.invertX(x),
+        newy = transform.invertY(y),
+        dx,
+        dy,
+        radius;
+
+    for (i = graph.nodes.length - 1; i >= 0; --i) {
+        node = graph.nodes[i];
+        dx = newx - node.x;
+        dy = newy - node.y;
+        radius = nodeRadius(node);
+
+        if (dx * dx + dy * dy < radius * radius) {
+            return node;
+        }
+    }
+}
+
+function dragsubject() {
+    var node = findNode(d3.event.x, d3.event.y);
+
+    node.x = transform.applyX(node.x);
+    node.y = transform.applyY(node.y);
+    return node
+}
+
+function dragstarted() {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d3.event.subject.fx = transform.invertX(d3.event.subject.x);
+    d3.event.subject.fy = transform.invertY(d3.event.subject.y);
+}
+
+function dragged() {
+    d3.event.subject.fx = transform.invertX(d3.event.x);
+    d3.event.subject.fy = transform.invertY(d3.event.y);
+}
+
+function dragended() {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d3.event.subject.fx = null;
+    d3.event.subject.fy = null;
+}
+
+update();
+
+</script>
+</body>
+</html>
