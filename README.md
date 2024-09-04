@@ -61,6 +61,9 @@ amass enum -d utica.edu -json amass_output.json
 view the surface mapping 
 [view](https://github.com/Eweka01/Attack-Surface-Mapping/blob/c5cb4aa7956347fcabc17f3a4d05576f61105989/amass.html)
 
+![Screenshot 2024-09-04 at 4 28 56 PM](https://github.com/user-attachments/assets/436e4bd8-41b6-48f5-b5ab-af388c0d1885)
+
+
 
 ## Conclusion
 This process outlines how to map the attack surface of a domain using Amass. The results can be further analyzed for potential vulnerabilities and network security issues. The generated results can be visualized using various external tools, depending on your preference and tool availability.
