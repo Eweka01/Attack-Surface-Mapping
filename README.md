@@ -59,7 +59,7 @@ amass enum -d utica.edu -json amass_output.json
 
 ### result
 view the surface mapping 
-[Uploading amass.html…]()
+[view](https://github.com/Eweka01/Attack-Surface-Mapping/blob/c5cb4aa7956347fcabc17f3a4d05576f61105989/amass.html)
 
 
 ## Conclusion
