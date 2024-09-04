@@ -1,6 +1,4 @@
-# Using-Visualization-to-Identify-Organizations
-
-## Utica University Attack Surface Mapping
+# Utica University Attack Surface Mapping
 
 This project involves using OWASP Amass to enumerate the subdomains of Utica University's domain (utica.edu) and visualize the discovered attack surface. The tools used include Amass and other potential tools for visualization and analysis.
 
